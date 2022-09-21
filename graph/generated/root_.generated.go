@@ -38,6 +38,11 @@ type ComplexityRoot struct {
 	Query struct {
 	}
 
+	Test struct {
+		ID   func(childComplexity int) int
+		Name func(childComplexity int) int
+	}
+
 	User struct {
 		ID   func(childComplexity int) int
 		Name func(childComplexity int) int
@@ -58,6 +63,20 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 	ec := executionContext{nil, e}
 	_ = ec
 	switch typeName + "." + field {
+
+	case "Test.id":
+		if e.complexity.Test.ID == nil {
+			break
+		}
+
+		return e.complexity.Test.ID(childComplexity), true
+
+	case "Test.name":
+		if e.complexity.Test.Name == nil {
+			break
+		}
+
+		return e.complexity.Test.Name(childComplexity), true
 
 	case "User.id":
 		if e.complexity.User.ID == nil {
@@ -130,6 +149,9 @@ var sources = []*ast.Source{
     id: ID!
 }
 
-`, BuiltIn: false},
+type Test {
+    name: String!
+    id: ID!
+}`, BuiltIn: false},
 }
 var parsedSchema = gqlparser.MustLoadSchema(sources...)

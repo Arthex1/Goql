@@ -3,3 +3,7 @@ type User {
     id: ID!
 }
 
+type Test {
+    name: String!
+    id: ID!
+}
