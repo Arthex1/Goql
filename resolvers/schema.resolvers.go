@@ -18,6 +18,7 @@ import (
 func (r *mutationResolver) CreateUser(ctx context.Context, input models.NewUser) (*models.User, error) {
 	usr, errr := database.Database.CreateUser(&models.User{
 		ID: fmt.Sprintf("%v", rand.Int()),
+		Name: input.Name,
 	})
 	if errr != nil {
 		return usr, nil
@@ -27,7 +28,11 @@ func (r *mutationResolver) CreateUser(ctx context.Context, input models.NewUser)
 
 // Users is the resolver for the users field.
 func (r *queryResolver) Users(ctx context.Context) ([]*models.User, error) {
-	panic(fmt.Errorf("not implemented: Users - users"))
+	usrs, err := database.Database.GetUsers(5)
+	if err != nil {
+		return usrs, nil 
+	}
+	return usrs, nil
 }
 
 // Mutation returns generated.MutationResolver implementation.
