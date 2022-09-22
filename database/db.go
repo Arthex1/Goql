@@ -12,8 +12,6 @@ type createdb struct {
   db *gorm.DB  
 }
 
-
-
 var db, err = gorm.Open(sqlite.Open("test.db"), &gorm.Config{})
 
 func run() (success bool) {
@@ -24,6 +22,7 @@ func run() (success bool) {
   db.AutoMigrate(&models.User{})
   return true 
 }
+
 var p any = run() 
 var Database *createdb = &createdb{db: db}
 
