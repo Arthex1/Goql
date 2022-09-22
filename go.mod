@@ -5,6 +5,8 @@ go 1.19
 require (
 	github.com/99designs/gqlgen v0.17.20
 	github.com/vektah/gqlparser/v2 v2.5.1
+	gorm.io/driver/sqlite v1.3.6
+	gorm.io/gorm v1.23.9
 )
 
 require (
@@ -24,6 +26,4 @@ require (
 	golang.org/x/text v0.3.7 // indirect
 	golang.org/x/tools v0.1.12 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
-	gorm.io/driver/sqlite v1.3.6 // indirect
-	gorm.io/gorm v1.23.9 // indirect
 )
