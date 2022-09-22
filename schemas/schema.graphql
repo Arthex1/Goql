@@ -1,9 +1,0 @@
-type User { 
-    name: String!
-    id: ID!
-}
-
-type Test {
-    name: String!
-    id: ID!
-}
