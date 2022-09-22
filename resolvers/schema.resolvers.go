@@ -5,14 +5,24 @@ package graph
 
 import (
 	"context"
+	"math/rand"
+
+	//"crypto/rand"
 	"fmt"
+	"goql/database"
 	"goql/graph/generated"
 	"goql/models"
 )
 
 // CreateUser is the resolver for the createUser field.
 func (r *mutationResolver) CreateUser(ctx context.Context, input models.NewUser) (*models.User, error) {
-	panic(fmt.Errorf("not implemented: CreateUser - createUser"))
+	usr, errr := database.Database.CreateUser(&models.User{
+		ID: fmt.Sprintf("%v", rand.Int()),
+	})
+	if errr != nil {
+		return usr, nil
+	}
+	return usr, nil
 }
 
 // Users is the resolver for the users field.
