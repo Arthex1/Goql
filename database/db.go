@@ -18,11 +18,11 @@ type BioDB struct {
 	Links       *LinksDB  `gorm:"foreignKey:ID"`
 	UserID      string   `json:"user_id"`
 	Description string   `json:"description"`
-	Skills       []*models.Skill `gorm:"foreignKey:UserID;references:ID"`
+	Skills       []*models.Skill `gorm:"foreignKey:UserID;references:ID"` 
 }
 
 type LinksDB struct {
-  ID string `gorm:"foreignKey:URLCode"` 
+  ID string
 	Portfolio string `json:"portfolio"`
 	Github    string `json:"github"`
 	Youtube   string `json:"youtube"`
