@@ -3,7 +3,6 @@ package database
 import (
 	"goql/models"
 	"log"
-	
 
 	"gorm.io/driver/sqlite"
 	"gorm.io/gorm"
@@ -23,7 +22,7 @@ type BioDB struct {
 }
 
 type LinksDB struct {
-  ID string
+  ID string `gorm:"foreignKey:URLCode"` 
 	Portfolio string `json:"portfolio"`
 	Github    string `json:"github"`
 	Youtube   string `json:"youtube"`
@@ -49,7 +48,12 @@ func run() (success bool) {
     panic("Error occured, database")
   }
   log.Println("test")
-  db.AutoMigrate(&UserDB{})
+  err := db.AutoMigrate(&UserDB{})
+  if err != nil {
+    log.Println(err) 
+    return false 
+  }
+  
   return true 
 }
 
