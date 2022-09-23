@@ -15,14 +15,14 @@ type createdb struct {
 
 type BioDB struct {
 	URLCode     string   `json:"url_code"`
-	Links       *LinksDB  `gorm:"foreignKey:ID"`
+	Links       *LinksDB  `gorm:"foreignKey:UserID;references:ID"`
 	UserID      string   `json:"user_id"`
 	Description string   `json:"description"`
-	Skills       []*models.Skill `gorm:"foreignKey:UserID;references:ID"` 
+	Skills       []*models.Skill `gorm:"foreignKey:URLCode;references:ID"` 
 }
 
 type LinksDB struct {
-  ID string
+  ID string //`json:"id"`
 	Portfolio string `json:"portfolio"`
 	Github    string `json:"github"`
 	Youtube   string `json:"youtube"`
