@@ -66,7 +66,7 @@ type ComplexityRoot struct {
 
 	Query struct {
 		Bio   func(childComplexity int, urlCode string) int
-		Users func(childComplexity int) int
+		Users func(childComplexity int, limit *int) int
 	}
 
 	Skill struct {
@@ -85,7 +85,7 @@ type MutationResolver interface {
 	CreateUser(ctx context.Context, input models.NewUser) (*models.User, error)
 }
 type QueryResolver interface {
-	Users(ctx context.Context) ([]*models.User, error)
+	Users(ctx context.Context, limit *int) ([]*models.User, error)
 	Bio(ctx context.Context, urlCode string) (*models.Bio, error)
 }
 
@@ -203,7 +203,12 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			break
 		}
 
-		return e.complexity.Query.Users(childComplexity), true
+		args, err := ec.field_Query_users_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Query.Users(childComplexity, args["limit"].(*int)), true
 
 	case "Skill.ID":
 		if e.complexity.Skill.ID == nil {
@@ -344,7 +349,7 @@ type Skill {
 }
 
 type Query {
-  users: [User!]!
+  users(limit: Int): [User!]!
   bio(url_code: String!): Bio
 }
 
@@ -359,7 +364,7 @@ input NewUser {
 input BioI {
   url_code: String!
   links: LinksI!
-  user_id: ID! 
+  #user_id: ID! 
   description: String! 
   skils: [SkillI]!  
 }
@@ -430,6 +435,21 @@ func (ec *executionContext) field_Query_bio_args(ctx context.Context, rawArgs ma
 		}
 	}
 	args["url_code"] = arg0
+	return args, nil
+}
+
+func (ec *executionContext) field_Query_users_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+	var err error
+	args := map[string]interface{}{}
+	var arg0 *int
+	if tmp, ok := rawArgs["limit"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("limit"))
+		arg0, err = ec.unmarshalOInt2ᚖint(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["limit"] = arg0
 	return args, nil
 }
 
@@ -1006,7 +1026,7 @@ func (ec *executionContext) _Query_users(ctx context.Context, field graphql.Coll
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Query().Users(rctx)
+		return ec.resolvers.Query().Users(rctx, fc.Args["limit"].(*int))
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -1040,6 +1060,17 @@ func (ec *executionContext) fieldContext_Query_users(ctx context.Context, field 
 			}
 			return nil, fmt.Errorf("no field named %q was found under type User", field.Name)
 		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Query_users_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return
 	}
 	return fc, nil
 }
@@ -3246,7 +3277,7 @@ func (ec *executionContext) unmarshalInputBioI(ctx context.Context, obj interfac
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"url_code", "links", "user_id", "description", "skils"}
+	fieldsInOrder := [...]string{"url_code", "links", "description", "skils"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -3266,14 +3297,6 @@ func (ec *executionContext) unmarshalInputBioI(ctx context.Context, obj interfac
 
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("links"))
 			it.Links, err = ec.unmarshalNLinksI2ᚖgoqlᚋmodelsᚐLinksI(ctx, v)
-			if err != nil {
-				return it, err
-			}
-		case "user_id":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("user_id"))
-			it.UserID, err = ec.unmarshalNID2string(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -4533,6 +4556,22 @@ func (ec *executionContext) marshalOBoolean2ᚖbool(ctx context.Context, sel ast
 		return graphql.Null
 	}
 	res := graphql.MarshalBoolean(*v)
+	return res
+}
+
+func (ec *executionContext) unmarshalOInt2ᚖint(ctx context.Context, v interface{}) (*int, error) {
+	if v == nil {
+		return nil, nil
+	}
+	res, err := graphql.UnmarshalInt(v)
+	return &res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) marshalOInt2ᚖint(ctx context.Context, sel ast.SelectionSet, v *int) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	res := graphql.MarshalInt(*v)
 	return res
 }
 

@@ -30,7 +30,7 @@ type Skill {
 }
 
 type Query {
-  users: [User!]!
+  users(limit: Int): [User!]!
   bio(url_code: String!): Bio
 }
 
@@ -45,7 +45,7 @@ input NewUser {
 input BioI {
   url_code: String!
   links: LinksI!
-  user_id: ID! 
+  #user_id: ID! 
   description: String! 
   skils: [SkillI]!  
 }

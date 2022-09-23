@@ -13,7 +13,6 @@ type Bio struct {
 type BioI struct {
 	URLCode     string    `json:"url_code"`
 	Links       *LinksI   `json:"links"`
-	UserID      string    `json:"user_id"`
 	Description string    `json:"description"`
 	Skils       []*SkillI `json:"skils"`
 }
