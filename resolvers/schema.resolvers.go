@@ -1,4 +1,4 @@
-package graph
+package resolvers
 
 // This file will be automatically regenerated based on the schema, any resolver implementations
 // will be copied through when generating and any unknown code will be moved to the end.
@@ -6,55 +6,18 @@ package graph
 import (
 	"context"
 	"fmt"
-	"goql/database"
 	"goql/graph/generated"
-	"goql/models"
-	"math/rand"
+	"goql/graph/model"
 )
 
-// CreateUser is the resolver for the createUser field.
-func (r *mutationResolver) CreateUser(ctx context.Context, input models.NewUser) (*models.User, error) {
-	usrid := fmt.Sprintf("%v", rand.Int())
-	skills := []*models.Skill{}
-	for i := range input.Bio.Skils {
-		skills = append(skills, (*models.Skill)(input.Bio.Skils[i]))
-	}
-	usr, errr := database.Database.CreateUser(&models.User{
-		ID:   usrid,
-		Name: input.Name,
-		Bio: &models.Bio{
-			URLCode: fmt.Sprintf("%v", rand.Int()),
-			//UserID: usrid,
-			Description: input.Bio.Description,
-			Links: &models.Links{
-				Github:    input.Bio.Links.Github,
-				Twitter:   input.Bio.Links.Twitter,
-				Youtube:   input.Bio.Links.Youtube,
-				ID:        fmt.Sprintf("%v", rand.Int()),
-				Portfolio: input.Bio.Links.Portfolio,
-			},
-			Skils: skills,
-		},
-	})
-
-	if errr != nil {
-		return usr, nil
-	}
-	return usr, nil
+// User is the resolver for the user field.
+func (r *mutationResolver) User(ctx context.Context, input model.NewUser) (*model.User, error) {
+	panic(fmt.Errorf("not implemented: User - user"))
 }
 
-// Users is the resolver for the users field.
-func (r *queryResolver) Users(ctx context.Context, limit *int) ([]*models.User, error) {
-	usrs, err := database.Database.GetUsers(*limit) 
-	if err != nil {
-		return usrs, nil
-	}
-	return usrs, nil
-}
-
-// Bio is the resolver for the bio field.
-func (r *queryResolver) Bio(ctx context.Context, urlCode string) (*models.Bio, error) {
-	panic(fmt.Errorf("not implemented: Bio - bio"))
+// User is the resolver for the user field.
+func (r *queryResolver) User(ctx context.Context) (*model.User, error) {
+	panic(fmt.Errorf("not implemented: User - user"))
 }
 
 // Mutation returns generated.MutationResolver implementation.
@@ -65,3 +28,10 @@ func (r *Resolver) Query() generated.QueryResolver { return &queryResolver{r} }
 
 type mutationResolver struct{ *Resolver }
 type queryResolver struct{ *Resolver }
+
+// !!! WARNING !!!
+// The code below was going to be deleted when updating resolvers. It has been copied here so you have
+// one last chance to move it out of harms way if you want. There are two reasons this happens:
+//   - When renaming or deleting a resolver the old code will be put in here. You can safely delete
+//     it when you're done.
+//   - You have helper methods in this file. Move them out to keep these resolver files clean.

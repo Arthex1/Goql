@@ -3,66 +3,18 @@
 # https://gqlgen.com/getting-started/
 
 type User {
-  name: String!
   id: ID!
-  bio: Bio
-}
-
-type Bio {
-  url_code: String!
-  links: Links!
-  user_id: ID! 
-  description: String! 
-  skils: [Skill]!  
-}
-
-type Links {
-  ID: ID!
-  portfolio: String!
-  github: String!
-  youtube: String!
-  twitter: String!
-}
-
-type Skill {
-  ID: ID!
-  name: String!
+    
 }
 
 type Query {
-  users(limit: Int): [User!]!
-  bio(url_code: String!): Bio
+  user: User
 }
-
-
-# input below 
 
 input NewUser {
-  name: String!
-  bio: BioI!   
-}
-
-input BioI {
-  url_code: String!
-  links: LinksI!
-  #user_id: ID! 
-  description: String! 
-  skils: [SkillI]!  
-}
-
-input LinksI {
-  ID: ID!
-  portfolio: String!
-  github: String!
-  youtube: String!
-  twitter: String!
-}
-
-input SkillI {
-  ID: ID!
-  name: String!
+  id: ID!
 }
 
 type Mutation {
-  createUser(input: NewUser!): User!
+  user(input: NewUser!): User!
 }
