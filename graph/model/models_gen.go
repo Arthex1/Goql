@@ -2,20 +2,63 @@
 
 package model
 
+type Badges struct {
+	ID        string `json:"id"`
+	Developer bool   `json:"developer"`
+	Plususer  bool   `json:"plususer"`
+}
+
 type Bio struct {
 	ID    string `json:"id"`
 	Text  string `json:"text"`
 	Email string `json:"email"`
 }
 
+type Links struct {
+	ID        string  `json:"id"`
+	Youtube   *string `json:"youtube"`
+	Twitter   *string `json:"twitter"`
+	Github    *string `json:"github"`
+	Linkedin  *string `json:"linkedin"`
+	Portfolio *string `json:"portfolio"`
+}
+
+type LinksInput struct {
+	Youtube   *string `json:"youtube"`
+	Twitter   *string `json:"twitter"`
+	Github    *string `json:"github"`
+	Linkedin  *string `json:"linkedin"`
+	Portfolio *string `json:"portfolio"`
+}
+
 type NewUser struct {
+	Name      string          `json:"name"`
+	BioText   string          `json:"bio_text"`
+	Email     string          `json:"email"`
+	Plususer  bool            `json:"plususer"`
+	Developer bool            `json:"developer"`
+	Links     *LinksInput     `json:"links"`
+	Projects  []*ProjectInput `json:"projects"`
+}
+
+type Project struct {
+	ID      string `json:"id"`
 	Name    string `json:"name"`
-	BioText string `json:"bio_text"`
-	Email   string `json:"email"`
+	Picture string `json:"picture"`
+	Link    string `json:"link"`
+}
+
+type ProjectInput struct {
+	Name    string `json:"name"`
+	Picture string `json:"picture"`
+	Link    string `json:"link"`
 }
 
 type User struct {
-	ID   string `json:"id"`
-	Name string `json:"name"`
-	Bio  *Bio   `json:"bio"`
+	ID       string     `json:"id"`
+	Name     string     `json:"name"`
+	Bio      *Bio       `json:"bio"`
+	Badges   *Badges    `json:"badges"`
+	Links    *Links     `json:"links"`
+	Projects []*Project `json:"projects"`
 }

@@ -6,7 +6,37 @@ type User {
  id: ID!
  name: String!
  bio: Bio!
+ badges: Badges!
+ links: Links!
+ projects: [Project]! 
+}
 
+type Project {
+  id: ID!
+  name: String!
+  picture: String!
+  link: String!
+}
+
+type Links {
+  id: ID!
+  youtube: String 
+  twitter: String 
+  github: String 
+  linkedin: String 
+  portfolio: String 
+}
+
+input ProjectInput {
+  name: String!
+  picture: String!
+  link: String!
+}
+
+type Badges {
+  id: ID! 
+  developer: Boolean!
+  plususer: Boolean!
 }
 
 type Bio {
@@ -18,11 +48,21 @@ type Bio {
 type Query {
   user: User
 }
-
+input LinksInput {
+  youtube: String 
+  twitter: String 
+  github: String 
+  linkedin: String 
+  portfolio: String 
+}
 input NewUser {
   name: String!
   bio_text: String!
   email: String!
+  plususer: Boolean! 
+  developer: Boolean!
+  links: LinksInput!
+  projects: [ProjectInput]
 }
 
 type Mutation {

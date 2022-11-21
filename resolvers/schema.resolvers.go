@@ -13,11 +13,11 @@ import (
 
 // User is the resolver for the user field.
 func (r *mutationResolver) User(ctx context.Context, input model.NewUser) (*model.User, error) {
-	usr, err := database.DB.Create_user(input.Name, input.BioText, input.Email)
+	usr, err := database.DB.Create_user(input.Name, input.BioText, input.Email, input.Developer, input.Plususer, *input.Links.Youtube, *input.Links.Twitter, *input.Links.Linkedin, *input.Links.Portfolio, *input.Links.Github, database.Convert_projects_to_db(input.Projects))
 	if err != nil {
 		return new(model.User), fmt.Errorf(err.Error())
 	}
-	to_ret := model.User{ID: usr.ID, Name: usr.Name, Bio: &model.Bio{Text: usr.Bio.Text, ID: usr.Bio.ID, Email: usr.Bio.Email}}
+	to_ret := model.User{ID: usr.ID, Name: usr.Name, Bio: &model.Bio{Text: usr.Bio.Text, ID: usr.Bio.ID, Email: usr.Bio.Email}, Links: &model.Links{ID: usr.Links.ID, Youtube: &usr.Links.Youtube, Twitter: &usr.Links.Youtube, Linkedin: &usr.Links.LinkedIN, Github: &usr.Links.Github, Portfolio: &usr.Links.Portfolio}, Badges: &model.Badges{ID: usr.Badges.ID, Developer: usr.Badges.Developer, Plususer: usr.Badges.PlusUser}, Projects: database.Convert_projects_to_query(usr.Projects)}
 	return &to_ret, nil
 }
 
