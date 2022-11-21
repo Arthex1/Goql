@@ -6,7 +6,8 @@ import (
 	// "net/http"
 	"goql/helpers"
 	"os"
-
+	
+	"goql/routes"
 	"github.com/gin-gonic/gin"
 	// "goql/resolvers"
 	// "github.com/99designs/gqlgen/graphql/handler"
@@ -23,7 +24,8 @@ func main() {
 
 	server := gin.Default() 
 	server.GET("/", helpers.PlaygroundHelper())
-	server.POST("/query", helpers.GraphQLHelper()) 
+	server.POST("/query", helpers.GraphQLHelper())
+	server.POST("/email", routes.Email) 
 	server.Run()
 	
 	// 

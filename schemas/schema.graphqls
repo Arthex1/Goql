@@ -3,8 +3,16 @@
 # https://gqlgen.com/getting-started/
 
 type User {
+ id: ID!
+ name: String!
+ bio: Bio!
+
+}
+
+type Bio {
   id: ID!
-    
+  text: String!
+  email: String!
 }
 
 type Query {
@@ -12,7 +20,9 @@ type Query {
 }
 
 input NewUser {
-  id: ID!
+  name: String!
+  bio_text: String!
+  email: String!
 }
 
 type Mutation {

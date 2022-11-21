@@ -2,10 +2,20 @@
 
 package model
 
+type Bio struct {
+	ID    string `json:"id"`
+	Text  string `json:"text"`
+	Email string `json:"email"`
+}
+
 type NewUser struct {
-	ID string `json:"id"`
+	Name    string `json:"name"`
+	BioText string `json:"bio_text"`
+	Email   string `json:"email"`
 }
 
 type User struct {
-	ID string `json:"id"`
+	ID   string `json:"id"`
+	Name string `json:"name"`
+	Bio  *Bio   `json:"bio"`
 }
