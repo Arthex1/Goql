@@ -25,7 +25,10 @@ func main() {
 	server := gin.Default() 
 	server.GET("/", helpers.PlaygroundHelper())
 	server.POST("/query", helpers.GraphQLHelper())
-	server.POST("/email", routes.Email) 
+	server.POST("/email", routes.Email)
+	server.Static("/getimage", "./images")
+	server.POST("/postimage", routes.PostImage)
+	
 	server.Run()
 	
 	// 

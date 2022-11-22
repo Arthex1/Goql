@@ -103,11 +103,15 @@ func (s *database) Create_user(name string, bio_text string, email string, devel
 	}
 
 	usr_search := s.db.Model(&User{}).Where("id = ?", id).Preload("Bio").Preload("Badges").Preload("Links").Preload("Projects").First(&to_ret)
-
+	
 	if usr_search.Error != nil {
 		return *to_ret, fmt.Errorf(usr_search.Error.Error())
 	}
 
 	return *to_ret, nil
+
+}
+func (s *database) Get_user() {
+	
 
 }
