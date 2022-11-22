@@ -27,7 +27,7 @@ func main() {
 	server.POST("/query", helpers.GraphQLHelper())
 	server.POST("/email", routes.Email)
 	server.Static("/getimage", "./images")
-	server.POST("/postimage", routes.PostImage)
+	server.POST("/postimage/:userid", routes.PostImage)
 	
 	server.Run()
 	
