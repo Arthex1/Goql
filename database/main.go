@@ -3,6 +3,7 @@ package database
 import (
 	"fmt"
 	"goql/graph/model"
+	"strings"
 
 	"github.com/google/uuid"
 	"gorm.io/driver/sqlite"
@@ -16,13 +17,15 @@ type User struct {
 	Bio      Bio       `gorm:"foreignKey:ID" json:"bio"`
 	Badges   Badges    `gorm:"foreignKey:id"`
 	Links    Links     `gorm:"foreignKey:id"`
+	Email string `gorm:"unique"`
+	Password string 
 	Projects []Project `gorm:"foreignKey:id"`
 }
 
 type Bio struct {
 	ID    string `json:"id"`
 	Text  string `json:"text"`
-	Email string `json:"email"`
+	
 }
 
 type Links struct {
@@ -92,9 +95,9 @@ func create_db() *database {
 
 var DB *database = create_db()
 
-func (s *database) Create_user(name string, bio_text string, email string, developer bool, plus bool, youtube string, twitter string, linkedin string, portfolio string, github string, Project []Project) (User, error) {
+func (s *database) Create_user(name string, bio_text string, email string, developer bool, plus bool, youtube string, twitter string, linkedin string, portfolio string, github string, Project []Project, password string) (User, error) {
 	id := uuid.New().String()
-	usr := s.db.Create(&User{Name: name, Bio: Bio{Text: bio_text, Email: email}, ID: id, Badges: Badges{Developer: developer, PlusUser: plus}, Links: Links{Youtube: youtube, Twitter: twitter, LinkedIN: linkedin, Portfolio: portfolio, Github: github}, Projects: Project})
+	usr := s.db.Create(&User{Name: name, Bio: Bio{Text: bio_text,},Email: email, Password: password,  ID: id, Badges: Badges{Developer: developer, PlusUser: plus}, Links: Links{Youtube: youtube, Twitter: twitter, LinkedIN: linkedin, Portfolio: portfolio, Github: github}, Projects: Project})
 	to_ret := new(User)
 
 	if usr.Error != nil {
@@ -111,7 +114,24 @@ func (s *database) Create_user(name string, bio_text string, email string, devel
 	return *to_ret, nil
 
 }
-func (s *database) Get_user() {
+func (s *database) Get_user(get_by string, indetifier any) (User, error) {
+	to_ret := new(User)
+	if strings.ToLower(get_by) == "id" {
+		usr_search := s.db.Model(&User{}).Where("id = ?", indetifier).Preload("Bio").Preload("Badges").Preload("Links").Preload("Projects").First(&to_ret)
 	
+		if usr_search.Error != nil {
+			return *to_ret, fmt.Errorf(usr_search.Error.Error())
+		}
+		return *to_ret, nil 
+	} else if strings.ToLower(get_by) == "email" {
+		usr_search := s.db.Model(&User{}).Where("email = ?", indetifier).Preload("Bio").Preload("Badges").Preload("Links").Preload("Projects").First(&to_ret)
+	
+		if usr_search.Error != nil {
+			return *to_ret, fmt.Errorf(usr_search.Error.Error())
+		}
+		return *to_ret, nil 
+	}
+
+	return *to_ret, fmt.Errorf("No proper get_by provided.")  
 
 }

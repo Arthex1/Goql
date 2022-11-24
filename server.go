@@ -28,6 +28,7 @@ func main() {
 	server.POST("/email", routes.Email)
 	server.Static("/getimage", "./images")
 	server.POST("/postimage/:userid", routes.PostImage)
+	server.POST("/verifypassword", routes.VerifyPass) 
 	
 	server.Run()
 	

@@ -9,9 +9,8 @@ type Badges struct {
 }
 
 type Bio struct {
-	ID    string `json:"id"`
-	Text  string `json:"text"`
-	Email string `json:"email"`
+	ID   string `json:"id"`
+	Text string `json:"text"`
 }
 
 type Links struct {
@@ -39,6 +38,7 @@ type NewUser struct {
 	Developer bool            `json:"developer"`
 	Links     *LinksInput     `json:"links"`
 	Projects  []*ProjectInput `json:"projects"`
+	Password  string          `json:"password"`
 }
 
 type Project struct {
@@ -61,4 +61,6 @@ type User struct {
 	Badges   *Badges    `json:"badges"`
 	Links    *Links     `json:"links"`
 	Projects []*Project `json:"projects"`
+	Email    string     `json:"email"`
+	Password string     `json:"password"`
 }

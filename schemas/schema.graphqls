@@ -9,6 +9,8 @@ type User {
  badges: Badges!
  links: Links!
  projects: [Project]! 
+ email: String!
+ password: String! 
 }
 
 type Project {
@@ -42,11 +44,11 @@ type Badges {
 type Bio {
   id: ID!
   text: String!
-  email: String!
+  
 }
 
 type Query {
-  user: User
+  user(id: String, email: String, get_by: String!): User
 }
 input LinksInput {
   youtube: String 
@@ -63,6 +65,7 @@ input NewUser {
   developer: Boolean!
   links: LinksInput!
   projects: [ProjectInput]
+  password: String! 
 }
 
 type Mutation {

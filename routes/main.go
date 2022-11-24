@@ -1,7 +1,7 @@
 package routes
 
 import (
-	
+	"goql/utils"
 	"io"
 	"log"
 	"path/filepath"
@@ -24,6 +24,7 @@ func check(path string, name string) bool {
     filepath.Walk(path, func(path string, info os.FileInfo, err error) error {
         if err != nil {
 			log.Print(err)
+			return err 
         }
 		
 		exists = strings.Contains(info.Name(), name) 
@@ -93,3 +94,21 @@ func PostImage(g *gin.Context) {
 
 		g.Status(202) 
 }
+
+func VerifyPass(g *gin.Context) {
+	id := g.Query("id")
+	pass := g.Query("password") 
+	verified, err := utils.VerifyPassword(pass, id) 
+	if err != nil {
+		g.JSON(502, gin.H{
+			"err": err.Error(),
+		})
+		return 
+	}
+	log.Print(verified)
+	g.JSON(202, gin.H{
+		"verified": verified, 
+	})
+
+}
+
